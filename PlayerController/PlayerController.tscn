@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3 uid="uid://d1divws4ae6yg"]
+
+[ext_resource type="Script" uid="uid://salhfs2pbha6" path="res://PlayerController/PlayerController.gd" id="1_u0xto"]
+[ext_resource type="PackedScene" uid="uid://bavgepaf2mvwg" path="res://MageModel/MageCharacter.tscn" id="2_2ud5e"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jyduy"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_u0xto"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_2ud5e"]
+
+[node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("model", "collision", "downward_stair_detector", "upward_stair_detector", "camera_head", "camera_pivot", "camera")]
+script = ExtResource("1_u0xto")
+model = NodePath("Model")
+collision = NodePath("CollisionShape3D")
+downward_stair_detector = NodePath("StairDetectors/DownwardDetector")
+upward_stair_detector = NodePath("StairDetectors/UpwardDetector")
+camera_head = NodePath("Head")
+camera_pivot = NodePath("Head/Pivot")
+camera = NodePath("Head/Pivot/Camera3D")
+gravity = 20.0
+jump_force = 10.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_jyduy")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_u0xto")
+
+[node name="Face" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(0.5, 0, 0, 0, 0.25, 0, 0, 0, 0.1, 0, 1.403929, -0.46801698)
+mesh = SubResource("BoxMesh_2ud5e")
+
+[node name="Mage" parent="Model" instance=ExtResource("2_2ud5e")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+visible = false
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7730021, 0)
+
+[node name="Pivot" type="Node3D" parent="Head"]
+
+[node name="Camera3D" type="Camera3D" parent="Head/Pivot"]
+cull_mask = 1048573
+
+[node name="StairDetectors" type="Node3D" parent="."]
+
+[node name="UpwardDetector" type="RayCast3D" parent="StairDetectors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.60624695, -0.5813647)
+target_position = Vector3(0, -0.6, 0)
+
+[node name="DownwardDetector" type="RayCast3D" parent="StairDetectors"]
+target_position = Vector3(0, -0.75, 0)
