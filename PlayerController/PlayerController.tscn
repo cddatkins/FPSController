@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1divws4ae6yg"]
+[gd_scene load_steps=7 format=3 uid="uid://d1divws4ae6yg"]
 
 [ext_resource type="Script" uid="uid://salhfs2pbha6" path="res://PlayerController/PlayerController.gd" id="1_u0xto"]
-[ext_resource type="PackedScene" uid="uid://bavgepaf2mvwg" path="res://MageModel/MageCharacter.tscn" id="2_2ud5e"]
+[ext_resource type="Script" uid="uid://wi3d03wkj2rm" path="res://Weapon/WeaponController.gd" id="2_2ud5e"]
+[ext_resource type="Resource" uid="uid://d3bxrp5juh13h" path="res://Weapon/Resources/w_Pistol.tres" id="3_ycagd"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jyduy"]
 
@@ -35,10 +36,6 @@ mesh = SubResource("CapsuleMesh_u0xto")
 transform = Transform3D(0.5, 0, 0, 0, 0.25, 0, 0, 0, 0.1, 0, 1.403929, -0.46801698)
 mesh = SubResource("BoxMesh_2ud5e")
 
-[node name="Mage" parent="Model" instance=ExtResource("2_2ud5e")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
-visible = false
-
 [node name="Head" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7730021, 0)
 
@@ -55,3 +52,9 @@ target_position = Vector3(0, -0.6, 0)
 
 [node name="DownwardDetector" type="RayCast3D" parent="StairDetectors"]
 target_position = Vector3(0, -0.75, 0)
+
+[node name="WeaponController" type="Node3D" parent="." node_paths=PackedStringArray("player", "camera")]
+script = ExtResource("2_2ud5e")
+player = NodePath("..")
+camera = NodePath("../Head/Pivot/Camera3D")
+current_weapon = ExtResource("3_ycagd")
