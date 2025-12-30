@@ -9,7 +9,7 @@ var _last_fire_time : float = -INF
 var _trigger_down : bool = false 
 
 func _process(delta: float) -> void:
-	if _resource.auto_fire: onTriggerDown()
+	if _trigger_down && _resource.auto_fire: onTriggerDown()
 
 func onEquip(manager: WeaponManager) -> void:
 	_manager = manager
@@ -65,21 +65,7 @@ func performHitscan() -> void:
 	var query = PhysicsRayQueryParameters3D.create(from, to, _manager.collision_layers)
 	var result = space_state.intersect_ray(query)
 	if result : 
-		print("Hit: ", result.collider.name, " at ", result.position)
-		spawnImpactMarker(result.position)
-
-func spawnImpactMarker(position: Vector3) -> void : 
-	var marker = MeshInstance3D.new()
-	var box = BoxMesh.new()
-	box.size = Vector3.ONE * 0.1
-	marker.mesh = box
-	var material = StandardMaterial3D.new()
-	material.albedo_color = Color.RED
-	marker.set_surface_override_material(0, material)
-	get_tree().current_scene.add_child(marker)
-	marker.global_position = position
-	get_tree().create_timer(2.0).timeout.connect(marker.queue_free)
-	
+		onHitTarget(result.collider, result.position, result.normal)
 
 func spawnProjectile() -> void: 
 	if !_resource.projectile: return
@@ -90,8 +76,12 @@ func spawnProjectile() -> void:
 	projectile.global_position = camera.global_position
 	var forward = -camera.global_transform.basis.z
 	var velocity = forward * _resource.projectile_speed
-	#projectile.global_transform.basis = Basis.looking_at(forward, Vector3.UP)
-	projectile.setup(velocity, _resource.damage, _manager.collision_layers, _resource.projectile_duration)
+	projectile.setup(velocity, _manager.collision_layers, _resource.projectile_duration)
+	projectile.on_hit_action = onHitTarget
+
+func onHitTarget(target: Node3D, hit_position: Vector3, hit_normal: Vector3) -> void :
+	print("Hit: ", target.name, " at ", hit_position)
+	spawnImpactMarker(hit_position)
 
 func reloadPressed() -> void: 
 	#play reload animation & once finished call reload
@@ -106,3 +96,15 @@ func reload() -> void:
 	else:
 		_current_ammo += reload_amount
 		_reserve_ammo -= reload_amount
+
+func spawnImpactMarker(position: Vector3) -> void : 
+	var marker = MeshInstance3D.new()
+	var box = BoxMesh.new()
+	box.size = Vector3.ONE * 0.1
+	marker.mesh = box
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color.RED
+	marker.set_surface_override_material(0, material)
+	get_tree().current_scene.add_child(marker)
+	marker.global_position = position
+	get_tree().create_timer(2.0).timeout.connect(marker.queue_free)
