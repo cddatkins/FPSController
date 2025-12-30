@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=4 format=3 uid="uid://d3bxrp5juh13h"]
+
+[ext_resource type="Script" uid="uid://djmg3ekm2ul56" path="res://Weapon/WeaponResource.gd" id="1_06iat"]
+[ext_resource type="PackedScene" uid="uid://cgnxieft3srwy" path="res://Weapon/Bullet.tscn" id="1_6x5cw"]
+[ext_resource type="PackedScene" uid="uid://b4pfvvgsnjnf4" path="res://Weapon/Models/Pistol.tscn" id="2_6x5cw"]
+
+[resource]
+script = ExtResource("1_06iat")
+weapon_name = "Pistol"
+weapon_scn = ExtResource("2_6x5cw")
+weapon_position = Vector3(0.5079983, -0.47000003, -1)
+weapon_scale = Vector3(0.5, 0.5, 0.5)
+projectile = ExtResource("1_6x5cw")
+projectile_duration = 3.0
+metadata/_custom_type_script = "uid://djmg3ekm2ul56"

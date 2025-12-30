@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=3 uid="uid://d1divws4ae6yg"]
 
 [ext_resource type="Script" uid="uid://salhfs2pbha6" path="res://PlayerController/PlayerController.gd" id="1_u0xto"]
-[ext_resource type="Script" uid="uid://wi3d03wkj2rm" path="res://Weapon/WeaponController.gd" id="2_2ud5e"]
-[ext_resource type="Resource" uid="uid://d3bxrp5juh13h" path="res://Weapon/Resources/w_Pistol.tres" id="3_ycagd"]
+[ext_resource type="Script" uid="uid://wi3d03wkj2rm" path="res://Weapon/WeaponManager.gd" id="2_2ud5e"]
+[ext_resource type="Resource" uid="uid://d3bxrp5juh13h" path="res://Weapon/Resources/wr_Pistol.tres" id="3_ycagd"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jyduy"]
 
@@ -11,6 +11,7 @@
 [sub_resource type="BoxMesh" id="BoxMesh_2ud5e"]
 
 [node name="PlayerController" type="CharacterBody3D" node_paths=PackedStringArray("model", "collision", "downward_stair_detector", "upward_stair_detector", "camera_head", "camera_pivot", "camera")]
+collision_mask = 3
 script = ExtResource("1_u0xto")
 model = NodePath("Model")
 collision = NodePath("CollisionShape3D")
@@ -53,8 +54,9 @@ target_position = Vector3(0, -0.6, 0)
 [node name="DownwardDetector" type="RayCast3D" parent="StairDetectors"]
 target_position = Vector3(0, -0.75, 0)
 
-[node name="WeaponController" type="Node3D" parent="." node_paths=PackedStringArray("player", "camera")]
+[node name="WeaponManager" type="Node3D" parent="." node_paths=PackedStringArray("player", "camera")]
 script = ExtResource("2_2ud5e")
 player = NodePath("..")
+collision_layers = 2
 camera = NodePath("../Head/Pivot/Camera3D")
-current_weapon = ExtResource("3_ycagd")
+current_weapon_resource = ExtResource("3_ycagd")

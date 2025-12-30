@@ -31,12 +31,16 @@ transform = Transform3D(1, 0, 0, 0, 0.6005737, 0.79956937, 0, -0.79956937, 0.600
 
 [node name="Ground" type="CSGBox3D" parent="."]
 use_collision = true
+collision_layer = 2
+collision_mask = 3
 size = Vector3(50, 0.1, 50)
 material = SubResource("StandardMaterial3D_iincs")
 
 [node name="CSGStairMaker3D" parent="." instance=ExtResource("2_qmtf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.045, 1.5, 0.656)
 use_collision = true
+collision_layer = 2
+collision_mask = 3
 size = Vector3(3, 3, 3)
 num_stairs = 10
 
@@ -44,17 +48,23 @@ num_stairs = 10
 transform = Transform3D(0.0165973, 0, -0.99986225, 0, 1, 0, 0.99986225, 0, 0.0165973, -3.6096475, 1.5, 9.91529)
 material_override = SubResource("StandardMaterial3D_d6qko")
 use_collision = true
+collision_layer = 2
+collision_mask = 3
 size = Vector3(6.9003906, 3, 3)
 num_stairs = 0
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6694803, 0.5751257, -11.266966)
 use_collision = true
+collision_layer = 2
+collision_mask = 3
 size = Vector3(10, 1, 5)
 material = SubResource("StandardMaterial3D_g08bm")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.45042, 1.6057997, 0.83081484)
 use_collision = true
+collision_layer = 2
+collision_mask = 3
 size = Vector3(1, 3, 3.561)
 material = SubResource("StandardMaterial3D_nk1il")

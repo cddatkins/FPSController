@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4pfvvgsnjnf4"]
+[gd_scene load_steps=4 format=3 uid="uid://b4pfvvgsnjnf4"]
+
+[ext_resource type="Script" uid="uid://kj3qaevx635b" path="res://Weapon/Weapon.gd" id="1_uuvg1"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5usau"]
 
@@ -8,6 +10,7 @@ bottom_radius = 0.075
 height = 0.35
 
 [node name="Pistol" type="Node3D"]
+script = ExtResource("1_uuvg1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.25, 0, 0, 0, 0.35, 0, 0, 0, 1, 0, 0, 0)
