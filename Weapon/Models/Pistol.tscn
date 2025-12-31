@@ -1,10 +1,45 @@
-[gd_scene load_steps=4 format=3 uid="uid://b4pfvvgsnjnf4"]
+[gd_scene load_steps=7 format=3 uid="uid://b4pfvvgsnjnf4"]
 
 [ext_resource type="Script" uid="uid://kj3qaevx635b" path="res://Weapon/Weapon.gd" id="1_uuvg1"]
+[ext_resource type="Shader" uid="uid://dbtri2jsuixsj" path="res://Weapon/Models/WeaponClip.gdshader" id="2_nlida"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i18n8"]
+render_priority = 0
+shader = ExtResource("2_nlida")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 1.0
+shader_parameter/normal_scale = 1.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/viewmodel_fov = -1.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_5usau"]
+material = SubResource("ShaderMaterial_i18n8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nlida"]
+render_priority = 0
+shader = ExtResource("2_nlida")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Vector4(0, 0, 0, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 1.0
+shader_parameter/normal_scale = 1.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/viewmodel_fov = -1.0
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_6cox0"]
+material = SubResource("ShaderMaterial_nlida")
 top_radius = 0.075
 bottom_radius = 0.075
 height = 0.35
@@ -21,5 +56,5 @@ transform = Transform3D(0.25, 0, 0, 0, 0.8, 0, 0, 0, 0.25, 0, -0.22653335, 0.380
 mesh = SubResource("BoxMesh_5usau")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.031387627, -0.69440764)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.031387627, -0.6719731)
 mesh = SubResource("CylinderMesh_6cox0")
