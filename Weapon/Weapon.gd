@@ -1,14 +1,25 @@
 class_name Weapon
 extends Node
 
+@export var muzzle_location: Node3D
+@export var muzzle_flash_effect: GPUParticles3D
+
 var _manager : WeaponManager
 var _resource : WeaponResource
 var _current_ammo : int = 0
 var _reserve_ammo : int = 999 
-var _last_fire_time : float = -INF
 var _trigger_down : bool = false 
+var _firerate_timer : float = 0
 
 func _process(delta: float) -> void:
+	handleAutoFire()
+	handleFireRate(delta)
+
+func handleFireRate(delta: float) -> void: 
+	if _firerate_timer > 0:  
+		_firerate_timer = max(0, _firerate_timer - delta)
+
+func handleAutoFire() -> void: 
 	if _trigger_down && _resource.auto_fire: onTriggerDown()
 
 func onEquip(manager: WeaponManager) -> void:
@@ -38,7 +49,7 @@ func onTriggerUp() -> void:
 	pass
 	
 func canFire() -> bool: 
-	var rate_available = Time.get_ticks_msec() - _last_fire_time >= _resource.fire_rate_ms
+	var rate_available = _firerate_timer == 0
 	var ammo_available = _current_ammo > 0
 	return rate_available && ammo_available
 	
@@ -52,7 +63,8 @@ func fire():
 		performHitscan()
 	else:
 		spawnProjectile()
-	_last_fire_time = Time.get_ticks_msec()
+	showMuzzleFlash()
+	_firerate_timer = 1.0 / _resource.firerate
 	_current_ammo -= 1
 
 func performHitscan() -> void:
@@ -61,11 +73,18 @@ func performHitscan() -> void:
 	var space_state = camera.get_world_3d().direct_space_state
 	var from = camera.global_position
 	var forward = -camera.global_basis.z
-	var to = from + forward * _resource.hitscan_range
-	var query = PhysicsRayQueryParameters3D.create(from, to, _manager.collision_layers)
-	var result = space_state.intersect_ray(query)
-	if result : 
-		onHitTarget(result.collider, result.position, result.normal)
+	for i in _resource.pellet_count: 
+		var direction = forward + getAccuracyOffset() * camera.global_basis
+		if _resource.pellet_count > 1:
+			var spread_angle = _resource.pellet_spread_angle
+			var spread_x = randf_range(-spread_angle, spread_angle)
+			var spread_y = randf_range(-spread_angle, spread_angle)
+			direction += Vector3(spread_x, spread_y, 0) * camera.global_basis
+		var to = from + direction * _resource.hitscan_range
+		var query = PhysicsRayQueryParameters3D.create(from, to, _manager.collision_layers)
+		var result = space_state.intersect_ray(query)
+		if result : 
+			onHitTarget(result.collider, result.position, result.normal)
 
 func spawnProjectile() -> void: 
 	if !_resource.projectile: return
@@ -75,7 +94,8 @@ func spawnProjectile() -> void:
 	get_tree().current_scene.add_child(projectile)
 	projectile.global_position = camera.global_position
 	var forward = -camera.global_transform.basis.z
-	var velocity = forward * _resource.projectile_speed
+	var direction = forward + getAccuracyOffset() * camera.global_basis
+	var velocity = direction * _resource.projectile_speed
 	projectile.setup(velocity, _manager.collision_layers, _resource.projectile_duration)
 	projectile.on_hit_action = onHitTarget
 
@@ -108,3 +128,13 @@ func spawnImpactMarker(position: Vector3) -> void :
 	get_tree().current_scene.add_child(marker)
 	marker.global_position = position
 	get_tree().create_timer(2.0).timeout.connect(marker.queue_free)
+
+func getAccuracyOffset() -> Vector3:
+	var accuracy_spread = (100 - _resource.accuracy) / 1000.0
+	var accuracy_x = randf_range(-accuracy_spread, accuracy_spread)
+	var accuracy_y = randf_range(-accuracy_spread, accuracy_spread)
+	return Vector3(accuracy_x, accuracy_y, 0)
+
+func showMuzzleFlash() -> void :
+	if muzzle_flash_effect :
+		muzzle_flash_effect.emitting = true

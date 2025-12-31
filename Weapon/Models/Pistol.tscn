@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b4pfvvgsnjnf4"]
+[gd_scene load_steps=8 format=3 uid="uid://b4pfvvgsnjnf4"]
 
 [ext_resource type="Script" uid="uid://kj3qaevx635b" path="res://Weapon/Weapon.gd" id="1_uuvg1"]
 [ext_resource type="Shader" uid="uid://dbtri2jsuixsj" path="res://Weapon/Models/WeaponClip.gdshader" id="2_nlida"]
+[ext_resource type="PackedScene" uid="uid://bbrvub66i250x" path="res://Weapon/Models/muzzleflash0.tscn" id="3_i18n8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i18n8"]
 render_priority = 0
@@ -44,8 +45,10 @@ top_radius = 0.075
 bottom_radius = 0.075
 height = 0.35
 
-[node name="Pistol" type="Node3D"]
+[node name="Pistol" type="Node3D" node_paths=PackedStringArray("muzzle_location", "muzzle_flash_effect")]
 script = ExtResource("1_uuvg1")
+muzzle_location = NodePath("Muzzle")
+muzzle_flash_effect = NodePath("Muzzle/MuzzleFlash")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.25, 0, 0, 0, 0.35, 0, 0, 0, 1, 0, 0, 0)
@@ -58,3 +61,8 @@ mesh = SubResource("BoxMesh_5usau")
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.031387627, -0.6719731)
 mesh = SubResource("CylinderMesh_6cox0")
+
+[node name="Muzzle" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.92352754)
+
+[node name="MuzzleFlash" parent="Muzzle" instance=ExtResource("3_i18n8")]
