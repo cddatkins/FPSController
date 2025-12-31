@@ -3,6 +3,7 @@ extends Node
 
 @export var muzzle_location: Node3D
 @export var muzzle_flash_effect: GPUParticles3D
+@export var bullet_trail_effect: PackedScene
 
 var _manager : WeaponManager
 var _resource : WeaponResource
@@ -138,3 +139,6 @@ func getAccuracyOffset() -> Vector3:
 func showMuzzleFlash() -> void :
 	if muzzle_flash_effect :
 		muzzle_flash_effect.emitting = true
+
+func createBulletTrail(targetPos : Vector3) -> void: 
+	pass
