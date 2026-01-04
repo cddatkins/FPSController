@@ -1,6 +1,8 @@
 class_name Weapon
 extends Node
 
+@export var animation_player: AnimationPlayer
+@export var audio_stream_player: AudioStreamPlayer3D
 @export var muzzle_location: Node3D
 @export var muzzle_flash_effect: GPUParticles3D
 @export var bullet_trail_effect: PackedScene
@@ -11,6 +13,14 @@ var _current_ammo : int = 0
 var _reserve_ammo : int = 999 
 var _trigger_down : bool = false 
 var _firerate_timer : float = 0
+var _is_reloading: bool = false
+var _on_animation_complete: Callable
+var _on_animation_cancel: Callable
+var _expected_animation: String = ""
+
+func _ready():
+	if animation_player:
+		animation_player.animation_changed.connect(onAnimationChanged)
 
 func _process(delta: float) -> void:
 	handleAutoFire()
@@ -28,6 +38,9 @@ func onEquip(manager: WeaponManager) -> void:
 	_resource = manager.current_weapon_resource
 	_current_ammo = _resource.clip_size
 	_reserve_ammo = _resource.max_reserve_ammo
+	playAnimation(_resource.equip_anim)
+	queueAnimation(_resource.idle_anim)
+	playSound(_resource.equip_sound)
 
 func onUnequip() -> void:
 	_manager = null
@@ -67,6 +80,9 @@ func fire():
 	showMuzzleFlash()
 	_firerate_timer = 1.0 / _resource.firerate
 	_current_ammo -= 1
+	playAnimation(_resource.shoot_anim)
+	queueAnimation(_resource.idle_anim)
+	playSound(_resource.shoot_sound)
 
 func performHitscan() -> void:
 	var camera = _manager.camera
@@ -105,8 +121,12 @@ func onHitTarget(target: Node3D, hit_position: Vector3, hit_normal: Vector3) -> 
 	spawnImpactMarker(hit_position)
 
 func reloadPressed() -> void: 
-	#play reload animation & once finished call reload
-	reload()
+	var canReload = getReloadAmount() > 0 && !_is_reloading
+	if !canReload: return
+	_is_reloading = true
+	playAnimation(_resource.reload_anim, reload, reloadCancel)
+	queueAnimation(_resource.idle_anim)
+	playSound(_resource.reload_sound)
 
 func reload() -> void:
 	var reload_amount = getReloadAmount()
@@ -117,6 +137,10 @@ func reload() -> void:
 	else:
 		_current_ammo += reload_amount
 		_reserve_ammo -= reload_amount
+	_is_reloading = false
+
+func reloadCancel() -> void: 
+	stopSounds()
 
 func spawnImpactMarker(position: Vector3) -> void : 
 	var marker = MeshInstance3D.new()
@@ -142,3 +166,53 @@ func showMuzzleFlash() -> void :
 
 func createBulletTrail(targetPos : Vector3) -> void: 
 	pass
+	
+func playAnimation(animation: String, onAnimationComplete: Callable = Callable(), onAnimationCancel: Callable = Callable()) -> void:
+	if animation_player == null || !animation_player.has_animation(animation):
+		if onAnimationComplete.is_valid(): 
+			onAnimationComplete.call()
+		return
+	# Cancel previous animation if different
+	if animation_player.current_animation != "" && animation_player.current_animation != animation:
+		if _on_animation_cancel.is_valid():
+			_on_animation_cancel.call()
+	
+	animation_player.clear_queue()
+	# Store callbacks
+	_expected_animation = animation
+	_on_animation_complete = onAnimationComplete
+	_on_animation_cancel = onAnimationCancel
+	animation_player.seek(0)
+	animation_player.play(animation) 
+
+func onAnimationFinished(anim_name: StringName) -> void:
+	if anim_name == _expected_animation:
+		if _on_animation_complete.is_valid():
+			_on_animation_complete.call()
+		# Clear state
+		_expected_animation = ""
+		_on_animation_complete = Callable()
+		_on_animation_cancel = Callable()
+
+func onAnimationChanged(old_anim_name: StringName, new_anim_name: StringName) -> void:
+	if new_anim_name != _expected_animation && _on_animation_complete.is_valid():
+		_on_animation_complete.call()
+	_expected_animation = animation_player.current_animation
+	if _expected_animation != old_anim_name:
+		_on_animation_complete = Callable()
+		_on_animation_cancel = Callable()
+
+func queueAnimation(animation: String) -> void:
+	if animation_player == null: return
+	if !animation_player.has_animation(animation): return
+	animation_player.queue(animation)
+	
+func playSound(sound: AudioStream) -> void:
+	if audio_stream_player == null: return
+	if sound: 
+		if audio_stream_player.stream != sound:
+			audio_stream_player.stream = sound
+		audio_stream_player.play()
+
+func stopSounds() -> void:
+	audio_stream_player.stop()

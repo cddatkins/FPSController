@@ -10,7 +10,6 @@ extends CharacterBody3D
 @export var head_crouch_origin : Vector3 = Vector3(0, 1.07, 0)
 @export var head_crouch_smooth_speed : float = 7
 
-
 @export_category("Camera Control")
 @export var camera_head : Node3D
 @export var camera_pivot : Node3D
@@ -22,7 +21,6 @@ extends CharacterBody3D
 @export var camera_max_pitch:= 60
 @export var camera_vert_invert:bool = false
 @export var camera_hori_invert:bool = false
-
 
 @export_category("Movement")
 @export var walk_speed : float = 7.0

@@ -20,9 +20,6 @@ func _process(delta: float) -> void:
 	handleInput()
 	handleCurrentWeapon()
 
-func _physics_process(delta: float) -> void:
-	pass
-
 func handleInput() -> void:
 	_fire_pressed = Input.is_action_just_pressed("fire")
 	_fire_held = Input.is_action_pressed("fire")
@@ -35,7 +32,7 @@ func handleCurrentWeapon() -> void:
 		elif !_fire_held:
 			_current_weapon.triggerPressed(false)
 		if _reload_pressed:
-			_current_weapon.reload_pressed()
+			_current_weapon.reloadPressed()
 
 func equipWeapon(weapon : WeaponResource) -> void:
 	if weapon == null: return

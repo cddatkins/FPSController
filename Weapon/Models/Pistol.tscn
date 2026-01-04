@@ -1,8 +1,54 @@
-[gd_scene load_steps=8 format=3 uid="uid://b4pfvvgsnjnf4"]
+[gd_scene load_steps=12 format=3 uid="uid://b4pfvvgsnjnf4"]
 
 [ext_resource type="Script" uid="uid://kj3qaevx635b" path="res://Weapon/Weapon.gd" id="1_uuvg1"]
 [ext_resource type="Shader" uid="uid://dbtri2jsuixsj" path="res://Weapon/Models/WeaponClip.gdshader" id="2_nlida"]
 [ext_resource type="PackedScene" uid="uid://bbrvub66i250x" path="res://Weapon/Models/muzzleflash0.tscn" id="3_i18n8"]
+
+[sub_resource type="Animation" id="Animation_wa7fy"]
+length = 0.001
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../Model")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, -0.85148525, 0)
+
+[sub_resource type="Animation" id="Animation_w4ilb"]
+resource_name = "pistolIdle"
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../Model")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.43333334, 1, 0, -0.06800175, 0, 0.8666667, 1, 0, 0, 0)
+
+[sub_resource type="Animation" id="Animation_i18n8"]
+resource_name = "pistolReload"
+length = 0.36667
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../../Model")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.13333334, 1, 0, -0.85148525, 0, 0.3, 1, 0, 0, 0)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../../Model")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.13333334, 1, -0.438677, 0, 0, 0.8986448, 0.3, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w4ilb"]
+_data = {
+&"RESET": SubResource("Animation_wa7fy"),
+&"pistolIdle": SubResource("Animation_w4ilb"),
+&"pistolReload": SubResource("Animation_i18n8")
+}
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_i18n8"]
 render_priority = 0
@@ -45,22 +91,38 @@ top_radius = 0.075
 bottom_radius = 0.075
 height = 0.35
 
-[node name="Pistol" type="Node3D" node_paths=PackedStringArray("muzzle_location", "muzzle_flash_effect")]
+[node name="Pistol" type="Node3D" node_paths=PackedStringArray("animation_player", "audio_stream_player", "muzzle_location", "muzzle_flash_effect")]
 script = ExtResource("1_uuvg1")
+animation_player = NodePath("AnimationPlayer")
+audio_stream_player = NodePath("AudioStreamPlayer3D")
 muzzle_location = NodePath("Muzzle")
 muzzle_flash_effect = NodePath("Muzzle/MuzzleFlash")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Muzzle/MuzzleFlash")
+libraries = {
+&"": SubResource("AnimationLibrary_w4ilb")
+}
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+
+[node name="Model" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.85148525, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(0.25, 0, 0, 0, 0.35, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_5usau")
+skeleton = NodePath("../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(0.25, 0, 0, 0, 0.8, 0, 0, 0, 0.25, 0, -0.22653335, 0.38006628)
 mesh = SubResource("BoxMesh_5usau")
+skeleton = NodePath("../..")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.031387627, -0.6719731)
 mesh = SubResource("CylinderMesh_6cox0")
+skeleton = NodePath("../..")
 
 [node name="Muzzle" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.92352754)

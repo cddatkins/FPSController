@@ -24,4 +24,10 @@ extends Resource
 @export_category("Weapon Audio")
 @export var shoot_sound : AudioStream
 @export var reload_sound : AudioStream
-@export var unholster_sound : AudioStream
+@export var equip_sound : AudioStream
+
+@export_category("Weapon Animation")
+@export var idle_anim: String
+@export var shoot_anim : String
+@export var reload_anim : String
+@export var equip_anim : String
