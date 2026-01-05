@@ -13,7 +13,6 @@ func _process(delta: float) -> void:
 	updateHealthBar()
 	updateAmmoBar()
 	
-
 func updateHealthBar() -> void: 
 	var health_pct = 1.0
 	if player : 
