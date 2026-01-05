@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://djmg3ekm2ul56" path="res://Weapon/WeaponResource.gd" id="1_06iat"]
 [ext_resource type="PackedScene" uid="uid://cgnxieft3srwy" path="res://Weapon/Bullet.tscn" id="1_6x5cw"]
-[ext_resource type="AudioStream" uid="uid://counu6xs7ni2t" path="res://addons/kenney_weapons_asset_pack/sounds/cc0-377145__nioczkus__pistol-draw-unholster.wav" id="1_a85ht"]
+[ext_resource type="AudioStream" uid="uid://counu6xs7ni2t" path="res://addons/MajikayoGames_weapons_asset_pack/sounds/cc0-377145__nioczkus__pistol-draw-unholster.wav" id="1_a85ht"]
 [ext_resource type="PackedScene" uid="uid://b4pfvvgsnjnf4" path="res://Weapon/Models/Pistol.tscn" id="2_6x5cw"]
-[ext_resource type="AudioStream" uid="uid://d3vi2o7bmt2yc" path="res://addons/kenney_weapons_asset_pack/sounds/cc0-276959__gfl7__pistol-reload-sound.mp3" id="3_bn62y"]
-[ext_resource type="AudioStream" uid="uid://bpximbnsca2u7" path="res://addons/kenney_weapons_asset_pack/sounds/cc0-369781__morganpurkis__silenced-gunshot.wav" id="5_he2o2"]
+[ext_resource type="AudioStream" uid="uid://d3vi2o7bmt2yc" path="res://addons/MajikayoGames_weapons_asset_pack/sounds/cc0-276959__gfl7__pistol-reload-sound.mp3" id="3_bn62y"]
+[ext_resource type="AudioStream" uid="uid://bpximbnsca2u7" path="res://addons/MajikayoGames_weapons_asset_pack/sounds/cc0-369781__morganpurkis__silenced-gunshot.wav" id="5_he2o2"]
 
 [resource]
 script = ExtResource("1_06iat")

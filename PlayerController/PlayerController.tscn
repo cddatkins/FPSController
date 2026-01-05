@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1divws4ae6yg"]
+[gd_scene load_steps=8 format=3 uid="uid://d1divws4ae6yg"]
 
 [ext_resource type="Script" uid="uid://salhfs2pbha6" path="res://PlayerController/PlayerController.gd" id="1_u0xto"]
 [ext_resource type="Script" uid="uid://wi3d03wkj2rm" path="res://Weapon/WeaponManager.gd" id="2_2ud5e"]
 [ext_resource type="Resource" uid="uid://d3bxrp5juh13h" path="res://Weapon/Resources/wr_Pistol.tres" id="3_ycagd"]
+[ext_resource type="PackedScene" uid="uid://cjnv6ho56g5rj" path="res://HUD/PlayerHUD.tscn" id="4_ps8a3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jyduy"]
 
@@ -60,3 +61,7 @@ player = NodePath("..")
 collision_layers = 2
 camera = NodePath("../Head/Pivot/Camera3D")
 current_weapon_resource = ExtResource("3_ycagd")
+
+[node name="PlayerHUD" parent="." node_paths=PackedStringArray("player", "weapon_manager") instance=ExtResource("4_ps8a3")]
+player = NodePath("..")
+weapon_manager = NodePath("../WeaponManager")

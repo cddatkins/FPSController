@@ -49,3 +49,8 @@ func createWeapon() -> void :
 	_current_weapon.position = current_weapon_resource.weapon_position
 	_current_weapon.scale = current_weapon_resource.weapon_scale
 	_current_weapon.rotation_degrees = current_weapon_resource.weapon_rotation
+
+func getWeaponAmmoPct() -> float : 
+	if _current_weapon == null: return 0.25
+	return _current_weapon.getAmmoPct()
+	

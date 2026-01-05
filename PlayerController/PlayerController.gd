@@ -61,6 +61,9 @@ var _noclip_enabled : bool = false
 const NOCLIP_SPEED_DEFAULT : float = 3
 var _noclip_speed_multi : = NOCLIP_SPEED_DEFAULT
 
+var health : int = 100
+var max_health : int = 100
+
 func _ready() -> void:
 	setModelVisibility()
 	collision.shape.height = collision_capsule_size

@@ -216,3 +216,7 @@ func playSound(sound: AudioStream) -> void:
 
 func stopSounds() -> void:
 	audio_stream_player.stop()
+
+func getAmmoPct() -> float :
+	if _resource == null || _resource.clip_size < 0 : return 1
+	return _current_ammo / (_resource.clip_size as float)
