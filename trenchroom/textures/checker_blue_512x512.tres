@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://lygyni7fs6xb"]
+
+[ext_resource type="Texture2D" uid="uid://dau5ivy4j1p2p" path="res://trenchroom/textures/checker_blue_512x512.png" id="1_la81j"]
+
+[resource]
+albedo_texture = ExtResource("1_la81j")
+metallic_specular = 0.0
+texture_filter = 2
